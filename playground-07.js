@@ -54,45 +54,43 @@
 
 
 
+
+// Sln con Chat GPT3 después de explorar alternativa de manera autónoma:
 function getStudentAverage(students) {
-    let studentAveraged = [];
-    let classAverage;
-    
-    function average(obj) {// fxn que usaré para obtener dos respuestas diferentes, pero que comparten el mismo método
-        let sum = obj.reduce((a, v) => a + v); //"a" llevará la cuenta de la suma; "v" es c/valor q se irá sumando
-        let average = sum / obj.length;
-        return average;
+  let total = 0; //variable que almacenará la suma total de las calificaciones promediadas de los estudiantes
+  let gradesAmount = 0; //denominador que se usará para calcular el promedio
+  let studentsFinal = []; //arreglo que recibirá los objetos de cada estudante con su nombre y promedio respectivo
+
+  for (let e = 0; e < students.length; e++) { //recorra cada estudiante de la lista...
+    let grades = students[e].grades; //lea las notas de cada estudiante
+    let average = 0; //inicialice esta variable en 0, la cual va a recibir la suma de calificaciones
+
+    gradesAmount++ // cada que aparezca un estudiante, sume una unidad al denominador que se usará para calcular el promedio de la clase
+
+    for (let a = 0; a < grades.length; a++) {//recorra las califiaciones de c/estudiante y súmelo a la calificación
+      average += grades[a]; //esto es igual a: average = average + grades[a]... actualiza el valor de la variable "average"
     }
 
-    class Student {//Creo clase utilizando patrón ROR
-        constructor({
-            name,
-            average,
-        }) {
-            this.name = name;
-            this.average = average;
-        }
-    }
+    average = Number((average / grades.length).toFixed(2)); //calcule el promedio de calificaciones de c/estudiante, redondeándolo a 2 decimales y convirtiéndolo a un valor de tipo número
+    studentsFinal.push({ //agregue su nombre y promedio a la lista creada para esto
+      name: students[e].name, 
+      average: average});
+      total += average; //agregue el promedio de c/estudiante al total de la clase
+  }
 
-    // Promedio estudiante
-    for (let e = 0; e < students.length; e++) {
-        let studentMeanGrade = average(students[e].grades);
-        console.log(`El promedio de ${students[e].name}, es ${studentMeanGrade}`);
-        // return studentMeanGrade;
+  let classAverage = total / gradesAmount;//calcule el promedio de la clase
+  classAverage = Number(classAverage.toFixed(2)); //redondee el promedio de la clase a 2 decimales y conviértalo a una variable de tipo "Número"
+  
+  // console.log(studentsFinal);
+  // console.log(classAverage);
 
-        const studentX = new Student({
-            name: students[e].name,
-            average: studentMeanGrade,
-        });
-
-        studentAveraged.push(studentX);
-        
-    }
-    console.log(studentAveraged);
-
-    // Promedio clase
-
+  // Devuelva un objeto que contenga el promedio de la clase y la lista de objetos de estudiantes con su promedio
+  return {classAverage: classAverage, students: studentsFinal};
 }
+
+
+
+
 
 Input: getStudentAverage([
   {
