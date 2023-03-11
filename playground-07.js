@@ -53,8 +53,6 @@
 
 
 
-
-
 // Sln con Chat GPT3 después de explorar alternativa de manera autónoma:
 function getStudentAverage(students) {
   let total = 0; //variable que almacenará la suma total de las calificaciones promediadas de los estudiantes
