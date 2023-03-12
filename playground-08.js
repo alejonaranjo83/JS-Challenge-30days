@@ -47,6 +47,7 @@ function findLargestPalindrome(words) {
         // let firstPal = pals[0]; //the bigger palindrom
         // console.log(pals[0]);
         // console.log(`This are the palindroms that were identified within the array: ${pals}`);
+        // console.table(pals); //by this way I can see the values of an array inside a table
         return pals[0];
     } else {
         // console.log('No palindroms at all');
