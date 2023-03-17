@@ -74,25 +74,25 @@
 
 
 
-// Sln desarrollada con ensayo y error personal + pasa a paso con Chat GPT3 para entender qué sucede en cada caso:
+// Sln desarrollada con ensayo y error personal + pasa a paso con Chat GPT3 para entender qué sucede en cada caso + sln de Platzi (porque lo q fxna en mi máquina no necesariamente lo hace en el playground de Platzi):
 
 function createTaskPlanner() {//function that will create a planner which has differente methods inside him
-    const tasks = []; //array that will receive tasks which will be created or deleted, depending on what the usar wants to do
+    let tasks = []; //array that will receive tasks which will be created or deleted, depending on what the usar wants to do
 
     return {
-        addTask(newTask){ //method for adding tasks
-            newTask.completed = false; //the "completed" property will be "false" by default
-            tasks.push(newTask); //add this task to the array
+        addTask(task){ //method for adding tasks
+            task.completed = false; //the "completed" property will be "false" by default
+            tasks.push(task); //add this task to the array
         },
-        removeTask(taskCodeOrName){ //if the id or the name that the user specify exists inside the array, delete that task
-            const taskIndex = tasks.findIndex(task => task.id === taskCodeOrName ||
-                task.name === taskCodeOrName); //"taskIndex" will store the task that is going to be deleted. If a task is found, "taskIndex" will store the position in which the task is found. If there´s no task found, "findIndex" will return "-1"
-            if(taskIndex !== -1) { //if a task was found... if taskIndex is different to "-1" it means that there´s a task that was found, so...
-                tasks.splice(taskIndex, 1); //delete that task according to its position (taskIndex) and only delete one element
+        removeTask(value){ 
+            if(typeof value === "number") {//if the value that the user has indicated is a number...
+                tasks = tasks.filter((task) => task.id != value); //create an array that doesn´t have the task with that value
+            } else { //if it´s type is different than a number, do the same as the previous one
+                tasks = tasks.filter((task) => task.name != value);
             }
         },
         getTasks(){
-            console.log(tasks); //print the array of tasks in the console
+            return tasks; //return the array of tasks in the console
         },
         getPendingTasks(){
             return tasks.filter((task) => !task.completed); //show the tasks that haven´t been completed
@@ -108,104 +108,133 @@ function createTaskPlanner() {//function that will create a planner which has di
             }
         },
         getSortedTasksByPriority() {
-            let sortedTasks = []; //create a new array that will receive the tasks ordered according to its priority, from the lower number to the highest
-            sorting = tasks.sort((a, b) => a.priority - b.priority) //use a compare function that will compare 2 objects according to its priority. If "a" is lower than "b" then it will return a negative value; if they have the same value, it will return 0; if "a" is higher than "b" it will return a positive value. Then with sort, the tasks will be ordered
-            sortedTasks.push(sorting); //add that task to the ordered array
-            // console.log(sortedTasks);
+            let sortedTasks = [...tasks].sort((a, b) => a.priority - b.priority); //create a new array that will receive the tasks ordered according to its priority, from the lower number to the highest
+            //"(a, b) => ......" means: use a compare function that will compare 2 objects according to its priority. If "a" is lower than "b" then it will return a negative value; if they have the same value, it will return 0; if "a" is higher than "b" it will return a positive value. Then with sort, the tasks will be ordered
+            return sortedTasks;
         },
         filterTasksByTag(tag){
             return tasks.filter((task) => task.tags.includes(tag)) //return a task according to the tag that the user have specified
         },
         updateTask(taskId, updates){ //update a task according to the index and the new properties that the user have defined
-            const taskUpdate = tasks[taskId]; //find the task that is going to be updated
-            if(taskUpdate){
-                Object.assign(taskUpdate, updates) //update that task with the properties of the new object
-            }
+            const taskUpdate = tasks.findIndex((task) => task.id === taskId); //find the task that is going to be updated
+            tasks[taskUpdate] = {...tasks[taskUpdate], ...updates};
+
         }
     }    
 }
 
 
 // Input
-const planner = createTaskPlanner();
-
-planner.addTask({
-    id: 1,
-    name: "Comprar leche",
-    priority: 1,
-    tags: ["shopping", "home"]
-});
-
-planner.getTasks();
-
-planner.removeTask(1);
-planner.removeTask("Comprar leche");
-planner.getTasks();
-
-
-
-planner.addTask({
-    id: 1,
-    name: "Comprar kipitos",
-    priority: 4,
-    tags: ["shopping", "home"]
-});
-
-planner.addTask({
-    id: 3,
-    name: "Terminar Timescales",
-    priority: 2,
-    tags: ["personal"],
-    // completed: true,
-});
-
-// planner.markTaskAsCompleted(1);
-planner.markTaskAsCompleted("Comprar leche");
-planner.getPendingTasks()
-
-planner.getCompletedTasks()
-
-
-planner.getSortedTasksByPriority()
-
-const filteredTasks = planner.filterTasksByTag("home");
-
-console.log(filteredTasks);
-
-planner.updateTask(1, {
-    name: "Ir a la piscina",
-    priority: 3,
-    tags: ["fitness", "swimming"],
-});
-
-
+function createTaskPlanner() {
+    const taskPlanner = {
+      tasks: [],
+      addTask(name, priority, tags) {
+        const task = {
+          id: this.tasks.length + 1,
+          name,
+          priority,
+          tags,
+          completed: false,
+        };
+        this.tasks.push(task);
+        return task;
+      },
+      removeTask(id) {
+        this.tasks = this.tasks.filter((task) => task.id !== id);
+      },
+      removeTaskByName(name) {
+        this.tasks = this.tasks.filter((task) => task.name !== name);
+      },
+      completeTask(id) {
+        const task = this.tasks.find((task) => task.id === id);
+        if (task) {
+          task.completed = true;
+        }
+      },
+      completeTaskByName(name) {
+        const task = this.tasks.find((task) => task.name === name);
+        if (task) {
+          task.completed = true;
+        }
+      },
+      getCompletedTasks() {
+        return this.tasks.filter((task) => task.completed);
+      },
+      filterTasksByTag(tag) {
+        return this.tasks.filter((task) => task.tags.includes(tag));
+      },
+      getSortedTasksByPriority() {
+        return [...this.tasks].sort((a, b) => b.priority - a.priority);
+      },
+      updateTask(id, property, value) {
+        const task = this.tasks.find((task) => task.id === id);
+        if (task) {
+          task[property] = value;
+        }
+      },
+    };
+    return taskPlanner;
+  }
 
 
-// Consulta chatGPT3:
-// Estoy creando un planeador en JS. Quiero que dentro del mismo hayan varios métodos. Por ejemplo, tengo creado un método para añadir objetos con tareas a un array y otro para saber qué objetos tiene por dentro:
-
-// function createTaskPlanner() {
-//     const tasks = [];
-
-//     return {
-//         addTask(newTask){
-//             tasks.push(newTask);
-//         },
-//         getTasks(){
-//             console.log(tasks);
-//         },
-//     }
-// }
-
-// Para usarlo, introduzco tareas que tienen las siguientes propiedades:
-// const planner = createTaskPlanner();
-
-// planner.addTask({
-//     id: 1,
-//     name: "Comprar leche",
-//     priority: 1,
-//     tags: ["shopping", "home"]
-// });
 
 
-// Crea métodos dentro de la función createTaskPlanner que me permitan: eliminar objetos dependiendo del código o nombre que indique el usuario; hacer que la propiedad "completed" de las tareas que se van a agregar, esté configurada como false; saber cuáles tareas están pendientes y otro que devuelva las tareas completadas
+
+// Sln Platzi:
+
+function createTaskPlanner() {
+    let tasks = [];
+  
+    return {
+      addTask(task) {
+        task.completed = false;
+        tasks.push(task);
+      },
+  
+      removeTask(value) {
+        if (typeof value === "number") {
+          tasks = tasks.filter((task) => task.id !== value);
+        } else {
+          tasks = tasks.filter((task) => task.name !== value);
+        }
+      },
+  
+      getTasks() {
+        return tasks;
+      },
+  
+      getPendingTasks() {
+        return tasks.filter((task) => !task.completed);
+      },
+  
+      getCompletedTasks() {
+        return tasks.filter((task) => task.completed);
+      },
+  
+      markTaskAsCompleted(value) {
+        let index;
+  
+        if (typeof value === "number") {
+          index = tasks.findIndex((task) => task.id === value);
+        } else {
+          index = tasks.findIndex((task) => task.name === value);
+        }
+  
+        tasks[index].completed = true;
+      },
+  
+      getSortedTasksByPriority() {
+        const sortedTasks = [...tasks].sort((a, b) => a.priority - b.priority);
+        return sortedTasks;
+      },
+  
+      filterTasksByTag(tag) {
+        return tasks.filter((task) => task.tags.includes(tag));
+      },
+  
+      updateTask(taskId, updates) {
+        const index = tasks.findIndex((task) => task.id === taskId);
+        tasks[index] = { ...tasks[index], ...updates };
+      },
+    };
+  }
