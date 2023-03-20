@@ -70,20 +70,15 @@ function validateForm(formData, registeredUsers){
     })    
 
     if(missing.length > 0) { //if there are missing fields 
-        // const message = `Faltan los siguientes campos: ${missing.join(", ")}`; //create a string that will join the values that are missing with ", "
-        // throw new Error(message);
         throw new Error(`Faltan los siguientes campos: ${missing.join(", ")}`) //show an error with the previous message
     }
 
     
     // 2. Verifying that email is not in the registered users list. In case there´s a user with that email, return an error specifying the duplicated email
-
-    // const newEmail = formData.email;
-    // const duplicatedEmail = registeredUsers.find(e => e.mail === newEmail);
     
-    const duplicatedEmail = registeredUsers.find(e => e.email === formData.email);
+    const duplicatedEmail = registeredUsers.find(e => e.email === formData.email); //search along the registered users array in the email field. If there´s an email equal to the email of the new user, then..
     if(duplicatedEmail) {
-        throw new Error(`El email ${formData.email} ya se encuentra registrado`);
+        throw new Error(`El email ${formData.email} ya se encuentra registrado`); //show an error with the duplicated email
     } else { // 3. If everything is ok, the user will be added to the list of registered users, with all the fields of the form, with exception of the password. Then it will return a message indicating that the registration was succesful, along with the user´s first and last name
         const newUser = {
             name: formData.name,
