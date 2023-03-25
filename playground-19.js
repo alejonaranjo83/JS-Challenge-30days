@@ -29,6 +29,35 @@
 //   { name: "product2", price: 20, inStock: false },
 // ]
 
+
+
 function sortByAvailabilityAndPrice(products) {
+    const sorted = products.slice(); //array that will be shown at the end to the user, preventing from modifying the original array
     
+    sorted.sort((a, b) => { //sort the array using a compare function
+        if (a.inStock && !b.inStock) { //1st thing to be compared is availability: if "a" is available (true) and "b" is not
+            return -1; //a negative number indicates that "a" must be shown before "b"
+        } else if (!a.inStock && b.inStock) { //if "a" isn´t available but "b" is, then "b" must be shown before "a"
+            return 1;
+        } else { //if both have the same availability, they should be ordered according to their price
+            return a.price - b.price;
+        }
+    })
+
+    return sorted
 }
+
+
+
+
+// Input:
+
+const products = [
+  { name: "product1", price: 10, inStock: true },
+  { name: "product2", price: 20, inStock: false },
+  { name: "product3", price: 15, inStock: true },
+  { name: "product4", price: 5, inStock: false },
+]
+
+
+sortByAvailabilityAndPrice(products)
