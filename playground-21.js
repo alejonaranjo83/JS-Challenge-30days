@@ -37,23 +37,30 @@
 
 
 function protectDog(dog) {
+    // Copy the original object
+    const dogCopied = Object.assign({}, dog);
+    // dogCopied.oe = 123;
+    // console.log(dogCopied);
 
+     // Freezing the copy avoiding to change his properties
+     Object.freeze(dogCopied)
+
+    for(const key in dogCopied) {//loop to go through each property of the object
+        const value = dogCopied[key];
+
+        if(typeof value === "object") {//if the value of the property is an object...
+            Object.freeze(value);//freeze that object as well
+        }
+    }
+    return dogCopied
 }
 
 
 
 
 
-// Input: 
-protectDog({
-    name: "Romeo",
-    age: 3,
-    owner: { name: "Victor", phoneNumber: "555-555-5555" },
-    favoriteFood: ["pollito", "croquetas"],
-    activities: ["jugar", "caminar"],
-})
 
-//Input2: 
+// Input: 
 protectDog({
     name: "Romeo",
     age: 3,
