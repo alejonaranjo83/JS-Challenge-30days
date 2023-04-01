@@ -55,61 +55,62 @@
 
 
 // Trying to run into my notebook, requires to use this one
-import { Product } from "./playground-24_2";
+// import { Product } from "./playground-24_2";
 
 
 
-// In order to use the playground, the next one should be used:
-// import { Product } from "./product";
+// Only run within the playground:
+import { Product } from "./product";
 
 
 
 class Article extends Product {
   // Tu código aquí 👈
-  addToCart() {
-    quant = 0;
-    artName = [];
-
-    // for (let i = 0; i < array.length; i++) {
-    //     const element = array[i];
-        
-    // }
-
-    console.log(`Agregando ${quant} unidades del artículo ${artName} al carrito`);
-    return(`Agregando ${quant} unidades del artículo ${artName} al carrito`);
+  // constructor(name, price, quantity) {
+  //   super(name, price, quantity)
+  // }
+  
+  addToCart() {  
+    return `Agregando ${this.quantity} unidades del artículo ${this.name} al carrito`;
   }
 }
 
 class Service extends Product {
   // Tu código aquí 👈
+  // constructor(name, price, quantity) {
+  //   super(name, price, quantity)
+  // }
+  
   addToCart() {
-    quant = 0;
-    servName = [];
-
-    console.log(`Agregando el servicio ${servName} al carrito`);
-    return(`Agregando ${quant} unidades del artículo ${artName} al carrito`);
+    return `Agregando el servicio ${this.name} al carrito`;
   }
 }
 
-class Cart extends Product {
+class Cart {
 // Tu código aquí 👈
-    compras = [];
+    constructor() {
+      this.compras = [];
+    }
 
     addProduct(product) {
-        this.compras.push();
+      product.addToCart();
+      this.compras.push(product);
     };
 
     deleteProduct(product) {
-        // filter
+      this.compras = this.compras.filter((item) => item.name !== product.name);
     };
 
     calculateTotal() {
-        total = compras.reduce((a, b) a + b);
+        const total = this.compras.reduce(
+          (sum, currentItem) =>
+          currentItem.price * currentItem.quantity + sum, 0
+        );
+        return total;
     };
 
-    getProducts(); {
-        console.log(compras);
-        return(compras);
+    getProducts() {
+        return this.compras;
     };
 }
 
