@@ -64,46 +64,35 @@ import { Product } from "./product";
 
 
 
-class Article extends Product {
-  // Tu código aquí 👈
-  // constructor(name, price, quantity) {
-  //   super(name, price, quantity)
-  // }
-  
+class Article extends Product {//a class will be created inheriting other properties class
   addToCart() {  
-    return `Agregando ${this.quantity} unidades del artículo ${this.name} al carrito`;
+    return `Agregando ${this.quantity} unidades del artículo ${this.name} al carrito`;//a method that indicates which and how many units of a single product have been created
   }
 }
 
 class Service extends Product {
-  // Tu código aquí 👈
-  // constructor(name, price, quantity) {
-  //   super(name, price, quantity)
-  // }
-  
   addToCart() {
     return `Agregando el servicio ${this.name} al carrito`;
   }
 }
 
 class Cart {
-// Tu código aquí 👈
     constructor() {
-      this.compras = [];
+      this.compras = [];//an empty array that will receive products to be purchased
     }
 
-    addProduct(product) {
-      product.addToCart();
-      this.compras.push(product);
+    addProduct(product) {//a method that receives a product as an argument
+      product.addToCart();//calls the "addToCart" method
+      this.compras.push(product);//add this product to the array
     };
 
-    deleteProduct(product) {
+    deleteProduct(product) {//the array will be redefined without incluing the searched item
       this.compras = this.compras.filter((item) => item.name !== product.name);
     };
 
     calculateTotal() {
-        const total = this.compras.reduce(
-          (sum, currentItem) =>
+        const total = this.compras.reduce(//create a new constant that will store the result of the reduce method that will go through each element of the array.
+          (sum, currentItem) => //Inside "reduce" there´s a callback function with 2 parameters: an acumulator (sum) that initializes with 0 and the current value. The current value is the result of multiplying the price with the quantity of each product.
           currentItem.price * currentItem.quantity + sum, 0
         );
         return total;
@@ -113,15 +102,3 @@ class Cart {
         return this.compras;
     };
 }
-
-
-
-
-// Input:
-
-const book = new Article("Libro", 100, 2);
-// const course = new Service("Curso", 120, 1);
-
-// const cart = new Cart();
-// cart.addProduct(book);
-// cart.addProduct(course);
