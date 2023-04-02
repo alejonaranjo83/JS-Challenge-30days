@@ -70,29 +70,27 @@
 
 // For the playground, the next scripts are located in separate files
 
-class Pay {
+class Pay {//a class with one method that will inherit to other sub classes
     // Tu código aquí 👈
-    // constructor() {}
-
-    makePay(quantity) {
-        return {
-            realized: true,
+    makePay(quantity) {//it receives a quantity as a parameter
+        return {//and returns an object wit two properties
+            realized: true,//the payment was successful
             quantity: quantity
         }
     }
 }
 
-class PayPal extends Pay {
+class PayPal extends Pay {//this is one of the sub classes that inherits from "Pay"
     // Tu código aquí 👈
-    constructor(email) {
-        super(); 
+    constructor(email) {//it will add an additional property
+        super(); //and resumes what is inside the class "Pay"
         this.email = email;
     }
 
-    makePay(quantity) {
+    makePay(quantity) {//the original method is going to be modified
         return {
-            ...super.makePay(quantity),
-            platform: "PayPal",
+            ...super.makePay(quantity),//it will still continue doing the same, but...
+            platform: "PayPal",//will add two properties
             email: this.email,
         }
     }
@@ -100,28 +98,25 @@ class PayPal extends Pay {
 
 class Card extends Pay {
     // Tu código aquí 👈
-    constructor(cardNumber) {
+    constructor(cardNumber) {//as with PayPal, in this case, there´s an additional property called "cardNumber"
         super();
         this.cardNumber = cardNumber;
     }
 
     makePay(quantity) {
-        if (this.cardNumber.length !== 16) {
+        if (this.cardNumber.length !== 16) {//before adding the card number, a validation needs to be done. If its length is different from 16, an error will be thrown
             throw new Error("Invalid Card Number")
         } 
-        const lastCardNumbers = this.cardNumber.toString().substr(-4);
+        const lastCardNumbers = this.cardNumber.toString().substr(-4);//otherwise, a constant will be created with the last four characters of that number
 
-        return {
+        return {//it will return an object with the original properties of the class, plus the last 4 numbers of the card
             ...super.makePay(quantity),
             lastCardNumbers,
         }
     }
 }
 
-class Cash extends Pay{
-    // constructor() {
-    //     super();
-    // }
+class Cash extends Pay{//this sub class will do the same thing as the class
     makePay(quantity) {
       return super.makePay(quantity)
     }
@@ -131,7 +126,7 @@ class Cash extends Pay{
 
 
 // This is the main exercise in the playground
-function processPay(method, quantity) {
+function processPay(method, quantity) {//a function that will receive two arguments, indicating which method is going to be used and the quantiqy of the payment
     return method.makePay(quantity);
 }
 
