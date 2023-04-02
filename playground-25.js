@@ -45,23 +45,22 @@
 
 
 
-class User {
-    // constructor(name, age, friends = [], messages = []) {
-    constructor(name, age) {
+class User { //a class is defined for a user with some properties
+    constructor(name, age) { //there are 2 basic arguments for each instance (a user) and two lists for friends and messages
         this._name = name;
         this._age = age;
-        this._friends = [];
+        this._friends = [];//if "friends" or "messages" are provided when creating an instance, those values will be used; otherwise, empty arrays will be used by default
         this._messages = [];
     };
 
-    get name() {
+    get name() { //"get" and "set" methods allows to access and update the "name" and "age" property of an instance (a user). With "get" I can obtain the value of a property
         return this._name;
     };
 
-    set name(newName) {
-        if (newName.length > 0) {
+    set name(newName) { //with "set" I can assign a value to the property
+        if (newName.length > 0) { //when a setter is called, a new value is set for the property, provided that some condition is met
             this._name = newName;
-        } else {
+        } else {//if the new name is an empty string, an error will be thrown
             throw new Error("El nombre no puede estar vacío");
         }
     }
@@ -78,11 +77,11 @@ class User {
         }
     };
 
-    addFriend(user){
+    addFriend(user){//method for adding a friend
         this._friends.push(user);
     };
    
-    sendMessage(message, friend){
+    sendMessage(message, friend){//method for sending a message to other users
         this._messages.push(message);
         friend._messages.push(message);
     };
