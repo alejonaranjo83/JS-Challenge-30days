@@ -42,47 +42,49 @@
 // ["Nunca pares de aprender!"]
 
 
+// This code is going to define two classes: User and Chat
+
 class User {
-    // Este código no debe ser editado ❌
-    constructor(name) {
-      this.name = name;
-      this.messages = [];
+    constructor(name) {//this class receives the name of the user as a parameter
+      this.name = name;//creates a property call "name" equal to the parameter
+      this.messages = [];//creates an empty array
     }
   
-    receiveMessage(message) {
+    receiveMessage(message) {//method for receiving messages and adding to the previously created array
       this.messages.push(message);
     }
   }
 
 
 class Chat {
-    constructor() {
-        if(!Chat.instance){
-            this.name = "Chat";
-            this.users = [];
-            Chat.instance = Object.freeze(this);
+    constructor() {//this class constructor...
+        if(!Chat.instance){//verifies if it already exists an instance of the class Chat, using the "Singleton" pattern. If there isn´t...
+            this.name = "Chat";//creates a property name equal to "Chat"
+            this.users = [];//creates a property users which is an empty array
+            Chat.instance = Object.freeze(this);//and freezes the instance avoiding to be modified
         }
-        return Chat.instance
+        return Chat.instance //returns the created instance
     }
 
-    sendMessage(message) {
-        this.users.forEach((user) => {
-            user.receiveMessage(message);
+    addUser(user) {//a method to add users that receives the name of the user as a parameter
+        if(user instanceof User) {//if the user is an instance of the class User...
+            this.users.push(user);//it will be added to the users list
+        }
+    };
+
+    sendMessage(message) {//a method that receives a message as a parameter
+        this.users.forEach((user) => {//goes through each user in the array
+            user.receiveMessage(message);//and uses the method that each user has to receive the message
         })
     };
 
-    addUser(user) {
-        if(user instanceof User) {
-            this.users.push(user);
-        }
-    };
 
-    removeUser(name) {
-        const userIndex = this.users.findIndex((u) => u.name === name);
-        if(userIndex === -1) {
-            throw new Error("User not found");
+    removeUser(name) {//a method that receives the name of a user as a parameter
+        const userIndex = this.users.findIndex((u) => u.name === name);//creates a constant to know if the user of the parameter is inside the array of users
+        if(userIndex === -1) {//if he didn´t found it (the previous operation returned -1)
+            throw new Error("User not found");//an error is sent
         }
-        this.users.splice(userIndex, 1);
+        this.users.splice(userIndex, 1);//if he found it, delete that user
     };
 }
 
