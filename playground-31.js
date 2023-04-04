@@ -1,132 +1,117 @@
-// En este reto, deberás utilizar el patrón decorator para personalizar productos en una tienda.
+// En este desafío, te proponemos utilizar el patrón builder para construir un objeto "auto".
 
-// La clase abstracta de la cual interactuarán los decoradores se encuentra en el archivo product.js el cual puedes ver dentro del sistema de archivos del playground.
+// Actualmente, la construcción de un auto en el código es confusa y difícil de leer.
 
-// La tienda ofrece productos con un precio base y una descripción, pero a veces los clientes quieren agregar extras, como una garantía o un seguro de envío. Tu objetivo es implementar el patrón decorator para permitir a los clientes personalizar sus productos con estos extras.
+// const car = new CarBuilder(2021, "Model X", "Tesla", "Red", 5000, false);
 
-// Debes implementar la lógica de las siguientes clases (cada una con su respectivo archivo dentro del coding playground):
+// Tu tarea será implementar el patrón builder para lograr una construcción más clara y legible.
 
-// BasicProduct(price, product): heredará de la clase Product y retornará el nombre del producto al implementar el método getDescription.
-// WarrantyDecorator(basicProduct): heredará de Product, pero deberá sumar 20$ al precio final y agregarle el string "con garantía" a la descripción del producto.
-// ShippingInsuranceDecorator(basicProduct): heredará de Product e igual que WarrantyDecorator, sumará 20 al precio final y agregará el string "con seguro de envío" a la descripción del producto.
-// Ejemplo 1:
+// Ejemplo:
+
 
 // Input:
-// const basicProduct = new BasicProduct(100, "Camisa de algodón");
-// const withWarranty = new WarrantyDecorator(basicProduct);
-// const withShippingInsurance = new ShippingInsuranceDecorator(withWarranty);
-// console.log(withShippingInsurance.getPrice());
-// console.log(withShippingInsurance.getDescription());
-// Output:
-// 140
-// "Camisa de algodón con garantía con seguro de envío"
 
-// Ejemplo 2:
+// const car = new CarBuilder()
+//   .setYear(2021)
+//   .setModel("Model X")
+//   .setBrand("Tesla")
+//   .setColor("Red")
+//   .setPrice(50000)
+//   .setIsAvailable(false)
+//   .build()
 
-// Input:
-// const basicProduct = new BasicProduct(5000, "Refrigerador");
-// const withWarranty = new WarrantyDecorator(basicProduct);
-// console.log(withWarranty.getPrice());
-// console.log(withWarranty.getDescription());
-// Output:
-// 5020
-// "Refrigerador con garantía"
-
-// Ejemplo 3:
-
-// Input:
-// const basicProduct = new BasicProduct(5000, "Refrigerador");
-// const withShippingInsurance = new ShippingInsuranceDecorator(basicProduct);
-// console.log(withShippingInsurance.getPrice());
-// console.log(withShippingInsurance.getDescription());
-// Output:
-// 5020
-// "Refrigerador con seguro de envío"
+// Output: {
+//   year: 2021,
+//   model: "Model x",
+//   brand: "Tesla",
+//   color: "Red",
+//   price: 50000,
+//   isAvailable": false
+// }
 
 
 
+// Original code from PLATZI that should be reorganized, so that it can be more clear and understandable:
 
-// This code uses the design pattern "Decorator". It creates a basic class and three sub classes that extend the basic one
-class Product {//basic class that receives a price as parameter
-    // Este código no debe ser editado ❌
-    constructor(price) {
+class CarBuilder {
+    // Tu código aquí 👇
+    constructor(year, model, brand, color, price, isAvailable) {
+      this.year = year;
+      this.model = model;
+      this.brand = brand;
+      this.color = color;
       this.price = price;
+      this.isAvailable = isAvailable;
     }
-  
-    getPrice() {//there are two methods within it
-      return this.price;//this one returns the price
+  }
+
+
+
+// Reordering the code
+
+// This code defines the class "CardBuilder" implementing the Builder pattern. This pattern allows us to create complex objects step by step, without having to specify all the parameters at once. Instead, the details are specified through the use of methods. At the end, the code calls the method "build" to get the whole object
+class CarBuilder {
+    // Tu código aquí 👇
+    constructor() {
+        this.year = 0;
+        this.model = "";
+        this.brand = "";
+        this.color = "";
+        this.price = 0;
+        this.isAvailable = true;
     }
-  
-    getDescription() {//the other throws an error indicating what should be done
-      throw new Error("Este método debe ser implementado en las subclases");
+
+    setYear(year) {//each method establishes a property of the object Car
+        this.year = year;
+        return this; //retrieves the object "Card Builder", allowing to call all methods in chain
+    }
+
+    setModel(model) {
+        this.model = model;
+        return this;
+    }
+
+    setBrand(brand) {
+        this.brand = brand;
+        return this;
+    }
+
+    setColor(color) {
+        this.color = color;
+        return this;
+    }
+
+    setPrice(price) {
+        this.price = price;
+        return this;
+    }
+
+    setIsAvailable(isAvailable) {
+        this.isAvailable = isAvailable;
+        return this;
+    }
+
+    build() {//the final method that creates an object with the previous properties
+        return {
+            year: this.year,
+            model: this.model,
+            brand: this.brand,
+            color: this.color,
+            price: this.price,
+            isAvailable: this.isAvailable,
+        }
     }
 }
-  
-
-class BasicProduct extends Product {
-    constructor(price, description) {//this is the first sub class. It receives a price and description as parameters
-      // Tu código aquí 👈
-      super(price);//the price is initialized calling the constructor of the super class
-      this.description = description;//the description is stored in other property
-    }
-  
-    getDescription() {//a method is implemented in order to obtain the description
-      // Tu código aquí 👈
-      return this.description
-    }
-}
-
-
-class WarrantyDecorator extends Product {
-    constructor(product) {//this sub class receives an instance of the Product class
-      // Tu código aquí 👈
-      super();//calls the constructor of the super class without parameters
-      this.product = product;//stores the received instance in this variable
-      this.priceWarranty = 20;//creates an additional variable to store the price of the warranty
-    }
-  
-    getPrice() {//a method that returns the price incluiding the warranty
-      // Tu código aquí 👈
-      return this.product.getPrice() + this.priceWarranty
-    }
-  
-    getDescription() {//a method that returns the description adding a string
-      // Tu código aquí 👈
-      return `${this.product.getDescription()} + con garantía`;
-    }
-}
-
-
-class ShippingInsuranceDecorator extends Product {//this sub class does something similar to the previous one, but varying a few things
-    constructor(product) {
-      // Tu código aquí 👈
-      super();
-      this.product = product;
-      this.shippingPrice = 20;
-    }
-  
-    getPrice() {
-      // Tu código aquí 👈
-      return this.product.getPrice() + this.shippingPrice;
-    }
-
-    getDescription() {
-      // Tu código aquí 👈
-      return `${this.product.getDescription()} + con seguro de envío`;
-    }
-}//in a nutshell, this code allows to create basic products and decorate them with warranty or shipping insurance, adding additional functions to the basic products without modifying the base class
 
 
 
+// Input:
 
-
-
-// Input 1:
-const basicProduct = new BasicProduct(100, "Camisa de algodón");
-const withWarranty = new WarrantyDecorator(basicProduct);
-const withShippingInsurance = new ShippingInsuranceDecorator(withWarranty);
-console.log(withShippingInsurance.getPrice());
-console.log(withShippingInsurance.getDescription());
-Output:
-140
-"Camisa de algodón con garantía con seguro de envío"
+const car = new CarBuilder()
+  .setYear(2021)
+  .setModel("Model X")
+  .setBrand("Tesla")
+  .setColor("Red")
+  .setPrice(50000)
+  .setIsAvailable(false)
+  .build()
