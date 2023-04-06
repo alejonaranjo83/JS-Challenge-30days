@@ -60,7 +60,7 @@ class MyArray {
         const mappedArray = new MyArray();//an empty array is created, using recursion within the same class
 
         for (let i = 0; i < this.length; i++) {//go through each element of the array
-            const currentItem = this.data[i];
+            const currentItem = this.data[i];//create a constant that will store the current element in each iteration
             const newItem = func(currentItem);//create a new item using the function of the parameter over the current item of the array
             mappedArray.push(newItem)//add the new item to the previously created array
         }
@@ -93,18 +93,52 @@ class MyArray {
         return lastItem;//returns the last item deleted
     }
   
-    // join(character = ",") {
-    //   // Tu código aquí 👈
-    // }
+    join(character = ",") {//a method to convert the elements of an array into a string that uses a character to separate them
+        // Tu código aquí 👈
+        const arr = this.dataToArray();//converting the values of the object into an array
+        let result = ``;//string that will be shown to the user
+
+        for (let i = 0; i < arr.length; i++) {//go through each element of the array
+            result += arr[i];//and concatenate them into the string
+
+            if (i !== arr.length - 1) {//if the array index is not the last one, then...
+                result += character; //add the character to separate them
+            }
+        }
+
+        return result;
+    }
   
-    // shift() {
-    //   // Tu código aquí 👈
-    // }
+    shift() {//delete the first element of an array
+        // Tu código aquí 👈
+        if (this.length === 0) {//if the array is empty
+            return undefined;//end the operation
+        }
+
+        const firstItem = this.data[0];//create a constant with the first element of the object
+
+        for (let i = 0; i < this.length - 1; i++) {//iterate through each element of the array
+            this.data[i] = this.data[i + 1];//assign the value of the next element to the current one... move the elements one position to the left
+        }
+        delete this.data[this.length - 1];//delete the first element
+        this.length--;//decrease the length by one
+        return firstItem;//return the value of the deleted item
+    }
   
-    // unshift(item) {
-    //   // Tu código aquí 👈
-    // }
-  }
+    unshift(item) {//method to add one or more elements to the beginning of an array
+        // Tu código aquí 👈
+        if (typeof item === 'undefined') {//if there´s no item passed as a parameter..
+            return this.length; // retrun the length of the actual array
+        }
+    
+        for (let i = this.length; i > 0; i--) {//go through each element of the array, from the last to the first one
+            this.data[i] = this.data[i - 1];//in each iteration, assign the value of the previous element to the current one... move the elements one position to the right
+        }
+        this.data[0] = item; //Add the new element to the first position
+        this.length++; // Increase the length
+        return this.length; // return the new length
+    }
+}
 
 
 
@@ -129,11 +163,17 @@ console.log(filteredArray.dataToArray());
 console.log(myArray.pop()); 
 console.log(myArray.dataToArray());
 
+
+console.log(myArray.join(character = ","))
+
+console.log(myArray.shift())
 // Input2:
 
 // const myArray = new MyArray()
 
 // myArray.push("Platzinauta");
-// myArray.unshift("Hola!")
+myArray.unshift("Hola!")
+console.log(myArray)
+console.log(myArray.length)
 
 // console.log(myArray.data)
