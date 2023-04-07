@@ -50,15 +50,16 @@
 // Output: null
 
 
+// This is a class for building a contact list using a "hashTable"
 
 class ContactList {
-    constructor(size) {
+    constructor(size) {//the constructor receives the parameter size for defining the size of the table
         // Tu código aquí 👈
-        this.buckets = new Array(size);
-        this.numBuckets = this.buckets.length;
+        this.buckets = new Array(size);//a new array is created with a number of elements specified by the parameter "size". Each element represents a "bucket"
+        this.numBuckets = this.buckets.length;//the amount of buckets is stored in a variable
     }
   
-    hash(name) {
+    hash(name) {//a method that takes a name as an input and returns a bucket index
         let total = 0;
         for (let i = 0; i < name.length; i++) {
             total += name.charCodeAt(i);
@@ -66,47 +67,47 @@ class ContactList {
         return total % this.numBuckets;
     }
   
-    insert(name, phone) {
+    insert(name, phone) {//method for adding a new contact to the list. "name" and "phone" are used as parameters
         // Tu código aquí 👈
-        const index = this.hash(name);
+        const index = this.hash(name);//calculate the index of the bucket using the "hash" method
 
-        if (!this.buckets[index]) {
-            this.buckets[index] = [];
+        if (!this.buckets[index]) {//if that bucket doesn´t exist...
+            this.buckets[index] = [];//a new array is created
         }
       
-        this.buckets[index].push([name, phone]);
+        this.buckets[index].push([name, phone]);//parameteres "name" and "phone" are added to the bucket
     }
   
-    get(name) {
+    get(name) {//method for searching a contact by his/her name
         // Tu código aquí 👈
-        const index = this.hash(name);
+        const index = this.hash(name);//calculate the bucket index using the "hash" method 
 
-        if (!this.buckets[index]) {
-            return null;
+        if (!this.buckets[index]) {//if the bucket doesn´t exist
+            return null;//end the process returning a "null" value
         }
-        for (let i = 0; i < this.buckets[index].length; i++) {
-            if (this.buckets[index][i][0] === name) {
-                return this.buckets[index][i][1];
+        for (let i = 0; i < this.buckets[index].length; i++) {//otherwise, go through all the buckets
+            if (this.buckets[index][i][0] === name) {//see if the name inserted as a parameter matches a name in the bucket
+                return this.buckets[index][i][1];//returns the telephone number
             }
         }
-        return null;
+        return null;//if the contact hasn´t been found, returns a null value
     }
   
-    retrieveAll() {
+    retrieveAll() {//a method for returning all the contacts of the table
         // Tu código aquí 👈
-        const allValues = [];
+        const allValues = [];//initialize an empty array
 
-        for (let i = 0; i < this.numBuckets; i++) {
+        for (let i = 0; i < this.numBuckets; i++) {//go through each bucket
             if (this.buckets[i]) {
-              for (let j = 0; j < this.buckets[i].length; j++) {
-                allValues.push(this.buckets[i][j]);
+              for (let j = 0; j < this.buckets[i].length; j++) {//and all the contacts within the bucket
+                allValues.push(this.buckets[i][j]);//add those contacts to the previously created array
               }
             }
           }
-          return allValues;
+          return allValues;//returns that array
     }
   
-    delete(name) {
+    delete(name) {//a method for deleting a contact in the list
         // Tu código aquí 👈
         const index = this.hash(name);
 
@@ -114,14 +115,14 @@ class ContactList {
             return null;
         }
       
-        for (let i = 0; i < this.buckets[index].length; i++) {
-            if (this.buckets[index][i][0] === name) {
-                this.buckets[index].splice(i, 1);
-                return;
+        for (let i = 0; i < this.buckets[index].length; i++) {//iterate through each contact
+            if (this.buckets[index][i][0] === name) {//if the contact is found with that name...
+                this.buckets[index].splice(i, 1); //delete that contact using the "splice" method
+                return;//returns without a value, indicating that the contact has been deleted successfully 
             }
         }
     }
-  }
+}
   
 
 
