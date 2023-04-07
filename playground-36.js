@@ -41,7 +41,7 @@ console.log(set);
 // Output: [1, 2, 3]
 
 
-
+//Function for creating "set´s", which are lists without duplicate values
 function removeDuplicates(values) {
     let set = new Set ()
     values.forEach(element => {
