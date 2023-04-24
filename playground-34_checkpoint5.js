@@ -109,134 +109,228 @@
 
 
 
+// SOLUCIÓN DE PROFE EN PLATZI (no me corre en una parte):
+// Abandono el reto... tengo otros intereses y oportunidades actualmente relacionadas con DataScience. Chao!
 
 
-
-// Exercise.js
 class Task{
-    constructor(id, description){
-       // Tu código aquí 👈
-    }
-  
-    assignUser(user){
-     // Tu código aquí 👈
-    }
-  
-    completeTask() {
-       // Tu código aquí 👈
-    }
-  
-    notifyUsers() {
-       // Tu código aquí 👈
-    }
+   constructor(id, description){
+     this.id = id,
+     this.description = description
+     this.completed = false
+     this.users = []
+   }
+ 
+   assignUser(user){
+     if(!(user instanceof User)){
+       throw new Error("No hereda de la clase user")
+     }
+     this.users.push(user)
+   }
+ 
+   completeTask() {
+     this.completed = true;
+     this.notifyUsers()
+   }
+ 
+   notifyUsers() {
+     this.users.forEach((user) => {
+       user.notify(this);
+     });
+   }
+ }
+
+
+
+
+class Authorization {
+   checkAuthorization(user, task) {
+     if (!task.users.includes(user)) {
+       throw new Error("No autorizado");
+     }
+   }
+ }
+
+
+
+class TaskBuilder {
+   constructor() {
+     this.task = new Task();
+   }
+ 
+   setId(id) {
+     this.task.id = id;
+     return this;
+   }
+ 
+   setDescription(description) {
+     this.task.description = description;
+     return this;
+   }
+ 
+   setCompleted(completed) {
+     this.task.completed = completed;
+     return this;
+   }
+ 
+   setUsers(users) {
+     for (const user of users) {
+       this.task.assignUser(user);
+     }
+     return this;
+   }
+ 
+   setDeadline(deadline) {
+     this.task.deadline = deadline;
+     return this;
+   }
+ 
+   setPriority(priority) {
+     this.task.priority = priority;
+     return this;
+   }
+ 
+   build() {
+     return this.task;
+   }
+}
+ 
+
+
+
+class TaskDecorator {
+   constructor(task, options) {
+     this.task = task
+     this.deadline = options.deadline;
+     this.priority = options.priority;
+   }
+ 
+   assignUser(user) {
+     this.task.assignUser(user);
+   }
+ 
+   completeTask() {
+     this.task.completeTask();
+   }
+ 
+   notifyUsers() {
+     this.task.notifyUsers();
+   }
+ }
+
+
+
+class TaskManager {
+   constructor() {
+     this.tasks = []
+   }
+ 
+   static getInstance() {
+     if (!TaskManager.instance) {
+       TaskManager.instance = new TaskManager();
+     }
+     return TaskManager.instance;
+   }
+ 
+   addTask(task){
+     this.tasks.push(task)
+   }
+ 
+   getTasks(){
+     return this.tasks
+   }
+
+   getTaskById(id){
+       const task = this.tasks.filter(task => task.id === id)[0]
+       if(task){
+         return task
+       }
+   
+       return null
+     }
+   
 }
 
 
 
 
 class User {
-    constructor(name) {
-       // Tu código aquí 👈
-    }
-  
-    notify(task) {
-       // Tu código aquí 👈
-    }
-}
-
-
-
-import { Task } from "./exercise";
-
-export class TaskManager {
-  constructor() {
-     // Tu código aquí 👈
-  }
-
-  static getInstance() {
-     // Tu código aquí 👈
-  }
-
-  addTask(task){
-     // Tu código aquí 👈
-  }
-
-  getTasks(){
-     // Tu código aquí 👈
-  }
-
-  getTaskById(id){
-     // Tu código aquí 👈
-  }
-}
+   constructor(name) {
+     this.name = name;
+   }
+ 
+   notify(task) {
+     console.log(`Usuario ${this.name}: La tarea "${task.description}" ha sido completada.`);
+   }
+ }
 
 
 
 
 
-class TaskDecorator {
-    constructor(task, options) {
-       // Tu código aquí 👈
-    }
-  
-    assignUser(user) {
-       // Tu código aquí 👈
-    }
-  
-    completeTask() {
-       // Tu código aquí 👈
-    }
-  
-    notifyUsers() {
-       // Tu código aquí 👈
-    }
-}
-
-
-
-import { Task } from "./exercise";
-
-export class TaskBuilder {
-  constructor() {
-     // Tu código aquí 👈
-  }
-
-  setId(id) {
-     // Tu código aquí 👈
-  }
-
-  setDescription(description) {
-     // Tu código aquí 👈
-  }
-
-  setCompleted(completed) {
-     // Tu código aquí 👈
-  }
-
-  setUsers(users) {
-     // Tu código aquí 👈
-  }
-
-  setDeadline(deadline) {
-     // Tu código aquí 👈
-  }
-
-  setPriority(priority) {
-     // Tu código aquí 👈
-  }
-
-  build() {
-     // Tu código aquí 👈
-  }
-}
 
 
 
 
+// Input 1:
+// const taskManager1 = TaskManager.getInstance();
+// const taskManager2 = TaskManager.getInstance();
 
-class Authorization {
-    checkAuthorization(user, task) {
-      // Tu código aquí 👈
-    }
-}
-  
+// taskManager1 === taskManager2
+
+// Output: true
+
+
+
+// Input 2:
+// const taskManager = TaskManager.getInstance();
+// const mockTask = new Task(1, "Mock task")
+
+// taskManager.addTask(new mockTask);
+// taskManager.getTasks();
+
+// Output:
+// [
+//   { id: 1, description: 'Mock task', completed: false, users: [] }
+// ]
+
+
+
+
+// Input 3:
+// const authorization = new Authorization()
+// const user1 = new User("Juan")
+// const user2 = new User("Maria")
+// const task = new Task('4', 'Comprar pan')
+// task.assignUser(user1)
+
+// authorization.checkAuthorization(user2, task)
+
+// Output:
+// Error("No autorizado")
+
+
+
+
+// Input 4:
+// const task = new Task('5', 'Pasear al perro')
+// const taskDecorator = new TaskDecorator(task, { deadline: '2023-03-31', priority: 'alta' })
+
+// console.log(taskDecorator)
+
+// Output:
+
+// {
+//   task: Task {
+//     id: '5',
+//     description: 'Pasear al perro',
+//     completed: false,
+//     users: []
+//   },
+//   deadline: '2023-03-31',
+//   priority: 'alta'
+// }
+
+
+
+
